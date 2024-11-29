@@ -8,6 +8,14 @@ A plugin for [GraphQL Code Generator](https://www.graphql-code-generator.com/) t
 npm install @shane32/graphql-codegen-near-operation-file-plugin
 ```
 
+Note: this package is published to the GitHub Packages registry. Please read GitHub documentation for configuration and authentication instructions. In short, you'll need to create a `.npmrc` file like this:
+
+```
+engine-strict = true
+@shane32:registry=https://npm.pkg.github.com/
+//npm.pkg.github.com/:_authToken=MY_GITHUB_PAT_TOKEN
+```
+
 ## Purpose
 
 This plugin helps manage GraphQL operations in a more organized way by:

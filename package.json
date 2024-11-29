@@ -4,14 +4,12 @@
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "umd:main": "dist/umd/index.js",
   "types": "dist/types/index.d.ts",
   "scripts": {
     "postinstall": "husky install",
-    "build": "npm run build:cjs && npm run build:esm && npm run build:umd && npm run build:types",
+    "build": "npm run build:cjs && npm run build:esm && npm run build:types",
     "build:cjs": "node tools/cleanup cjs && tsc -p config/tsconfig.cjs.json && copyfiles \"src/**/*\" dist/cjs -e \"**/*.ts\" -e \"**/*.tsx\" -e \"**/*.js\" -e \"**/*.jsx\" -e \"**/*.test.*\" -u 1",
     "build:esm": "node tools/cleanup esm && tsc -p config/tsconfig.esm.json && copyfiles \"src/**/*\" dist/esm -e \"**/*.ts\" -e \"**/*.tsx\" -e \"**/*.js\" -e \"**/*.jsx\" -e \"**/*.test.*\" -u 1",
-    "build:umd": "node tools/cleanup umd && webpack --config config/webpack.config.js",
     "build:types": "node tools/cleanup types && tsc -p config/tsconfig.types.json",
     "clean": "node tools/cleanup",
     "package": "npm run build && npm pack",
@@ -35,8 +33,7 @@
     "starter",
     "demo",
     "cjs",
-    "esm",
-    "umd"
+    "esm"
   ],
   "author": "Shane Krueger <shane@acdmail.com>",
   "license": "MIT",
@@ -55,6 +52,7 @@
     "@graphql-codegen/plugin-helpers": "^5.0.3"
   },
   "devDependencies": {
+    "@graphql-tools/apollo-engine-loader": "^8.0.6",
     "@types/pretty": "^2.0.3",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
@@ -62,15 +60,11 @@
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "file-loader": "^6.2.0",
     "husky": "^9.0.11",
     "prettier": "^2.8.8",
     "pretty": "^2.0.0",
     "pretty-quick": "^3.3.1",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.4.5",
-    "webpack": "^5.91.0",
-    "webpack-cli": "^5.1.4"
+    "typescript": "^5.7.2"
   },
   "engines": {
     "node": ">=18",

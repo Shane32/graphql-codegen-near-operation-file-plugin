@@ -3,3 +3,5 @@
 *.yml
 *.esproj
 *.sln
+dist
+node_modules

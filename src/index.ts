@@ -5,8 +5,8 @@ import * as fs from "fs";
 
 // This interface represents the configuration of the plugin
 // from the codegen.ts file
-interface MyPluginConfig {
-  graphqlTagName: string;
+interface IPluginConfig {
+  includeFileExtension?: boolean;
 }
 
 interface IInfo {
@@ -18,9 +18,12 @@ interface IInfo {
   };
 }
 
-const plugin: PluginFunction<MyPluginConfig> = (schema, documents, config, info: IInfo | undefined) => {
+const plugin: PluginFunction<IPluginConfig> = (schema, documents, config, info: IInfo | undefined) => {
   void schema;
   void config;
+
+  // Config options
+  const includeFileExtension = config.includeFileExtension ?? false;
 
   // Step 1: Extract data
   const input = extractData(documents, info);
@@ -39,7 +42,7 @@ const plugin: PluginFunction<MyPluginConfig> = (schema, documents, config, info:
   const operationDefinitionsByLocation = findOperationDefinitionsByLocation(documentsByLocation);
 
   // Step 5: Prepare files to write
-  const filesToWrite = prepareFilesToWrite(operationDefinitionsByLocation, outputFilePath);
+  const filesToWrite = prepareFilesToWrite(operationDefinitionsByLocation, outputFilePath, includeFileExtension);
 
   // Step 6: Write files
   writeFiles(filesToWrite);
@@ -128,13 +131,17 @@ interface IFilenameContents {
 }
 
 // 5. Create array with properties filename and contents for files
-function prepareFilesToWrite(operationDefinitionsByLocation: Record<string, IOperationDefinitionInfo[]>, outputFilePath: string) {
+function prepareFilesToWrite(
+  operationDefinitionsByLocation: Record<string, IOperationDefinitionInfo[]>,
+  outputFilePath: string,
+  includeFileExtension: boolean
+) {
   const filesToWrite: IFilenameContents[] = [];
   for (const location in operationDefinitionsByLocation) {
     const operationDefinitions = operationDefinitionsByLocation[location];
     const newFilePath = createFilenameWithNewExtension(location, ".g.ts");
     const relativeOutputFile = determineRelativePath(newFilePath, outputFilePath);
-    const contents = createExportDefinitions(operationDefinitions, relativeOutputFile);
+    const contents = createExportDefinitions(operationDefinitions, relativeOutputFile, includeFileExtension);
     filesToWrite.push({
       filename: newFilePath,
       contents: contents,
@@ -159,14 +166,25 @@ function determineRelativePath(fromPath: string, toPath: string) {
   return relativePathPosix;
 }
 
+// Utility function to remove the file extension
+function removeFileExtension(filePath: string) {
+  return filePath.replace(/\.[^/.]+$/, ""); // Removes the last file extension
+}
+
 // 5c. Create export definition for each operation definition importing from relativeOutputFile
-function createExportDefinitions(operationDefinitions: IOperationDefinitionInfo[], relativeOutputFile: string) {
+function createExportDefinitions(
+  operationDefinitions: IOperationDefinitionInfo[],
+  relativeOutputFile: string,
+  includeFileExtension: boolean
+) {
   const exportNames = operationDefinitions
     .map((def) => def.name)
     .filter(Boolean)
     .map((name) => name + "Document")
     .join(", ");
-  const contents = `export { ${exportNames} } from "${relativeOutputFile}";`;
+
+  const filePath = includeFileExtension ? relativeOutputFile : removeFileExtension(relativeOutputFile);
+  const contents = `export { ${exportNames} } from "${filePath}";`;
   return contents;
 }
 

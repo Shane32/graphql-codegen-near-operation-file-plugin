@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "@graphql-tools/apollo-engine-loader": "^8.0.6",
-    "@types/node": "^18.19.67",
+    "@types/node": "^22.10.3",
     "@types/pretty": "^2.0.3",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",

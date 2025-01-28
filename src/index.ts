@@ -183,7 +183,13 @@ function createExportDefinitions(
     .map((name) => name + "Document")
     .join(", ");
 
-  const filePath = includeFileExtension ? relativeOutputFile : removeFileExtension(relativeOutputFile);
+  let filePath = includeFileExtension ? relativeOutputFile : removeFileExtension(relativeOutputFile);
+
+  // Ensure the filePath starts with ./ if it doesn't start with ../ or ./
+  if (!filePath.startsWith("../") && !filePath.startsWith("./")) {
+    filePath = `./${filePath}`;
+  }
+
   const contents = `export { ${exportNames} } from "${filePath}";`;
   return contents;
 }

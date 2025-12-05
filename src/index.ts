@@ -7,6 +7,7 @@ import * as fs from "fs";
 // from the codegen.ts file
 interface IPluginConfig {
   includeFileExtension?: boolean;
+  fileHeader?: string;
 }
 
 interface IInfo {
@@ -24,6 +25,7 @@ const plugin: PluginFunction<IPluginConfig> = (schema, documents, config, info: 
 
   // Config options
   const includeFileExtension = config.includeFileExtension ?? false;
+  const fileHeader = config.fileHeader ?? "This file was automatically generated based on {filename}";
 
   // Step 1: Extract data
   const input = extractData(documents, info);
@@ -42,7 +44,7 @@ const plugin: PluginFunction<IPluginConfig> = (schema, documents, config, info: 
   const operationDefinitionsByLocation = findOperationDefinitionsByLocation(documentsByLocation);
 
   // Step 5: Prepare files to write
-  const filesToWrite = prepareFilesToWrite(operationDefinitionsByLocation, outputFilePath, includeFileExtension);
+  const filesToWrite = prepareFilesToWrite(operationDefinitionsByLocation, outputFilePath, includeFileExtension, fileHeader);
 
   // Step 6: Write files
   writeFiles(filesToWrite);
@@ -134,14 +136,16 @@ interface IFilenameContents {
 function prepareFilesToWrite(
   operationDefinitionsByLocation: Record<string, IOperationDefinitionInfo[]>,
   outputFilePath: string,
-  includeFileExtension: boolean
+  includeFileExtension: boolean,
+  fileHeader: string
 ) {
   const filesToWrite: IFilenameContents[] = [];
   for (const location in operationDefinitionsByLocation) {
     const operationDefinitions = operationDefinitionsByLocation[location];
     const newFilePath = createFilenameWithNewExtension(location, ".g.ts");
     const relativeOutputFile = determineRelativePath(newFilePath, outputFilePath);
-    const contents = createExportDefinitions(operationDefinitions, relativeOutputFile, includeFileExtension);
+    const header = generateFileHeader(fileHeader, location);
+    const contents = createExportDefinitions(operationDefinitions, relativeOutputFile, includeFileExtension, header);
     filesToWrite.push({
       filename: newFilePath,
       contents: contents,
@@ -171,11 +175,22 @@ function removeFileExtension(filePath: string) {
   return filePath.replace(/\.[^/.]+$/, ""); // Removes the last file extension
 }
 
+// 5b2. Generate file header with filename replacement
+function generateFileHeader(fileHeader: string, location: string): string {
+  if (!fileHeader) {
+    return "";
+  }
+  const filename = path.basename(location);
+  const headerText = fileHeader.replace(/\{filename\}/g, filename);
+  return `// ${headerText}\n`;
+}
+
 // 5c. Create export definition for each operation definition importing from relativeOutputFile
 function createExportDefinitions(
   operationDefinitions: IOperationDefinitionInfo[],
   relativeOutputFile: string,
-  includeFileExtension: boolean
+  includeFileExtension: boolean,
+  header: string
 ) {
   const exportNames = operationDefinitions
     .map((def) => def.name)
@@ -190,7 +205,8 @@ function createExportDefinitions(
     filePath = `./${filePath}`;
   }
 
-  const contents = `export { ${exportNames} } from "${filePath}";`;
+  const exportStatement = `export { ${exportNames} } from "${filePath}";`;
+  const contents = header ? `${header}${exportStatement}` : exportStatement;
   return contents;
 }
 

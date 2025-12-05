@@ -47,15 +47,15 @@ The plugin supports the following configuration options:
 
 ### `includeFileExtension`
 
-**Type:** `boolean`
-**Default:** `false`
+- **Type:** `boolean`
+- **Default:** `false`
 
 When set to `true`, the generated import statements will include the file extension (e.g., `"../gql/graphql.ts"` instead of `"../gql/graphql"`).
 
 ### `fileHeader`
 
-**Type:** `string`
-**Default:** `"This file was automatically generated based on {filename}"`
+- **Type:** `string`
+- **Default:** `"This file was automatically generated based on {filename}"`
 
 Specifies a custom header comment to be added at the top of each generated file. The placeholder `{filename}` will be replaced with the name of the source file.
 

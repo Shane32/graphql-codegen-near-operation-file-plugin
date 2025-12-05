@@ -41,7 +41,54 @@ const config: CodegenConfig = {
 export default config;
 ```
 
-### Example
+## Configuration
+
+The plugin supports the following configuration options:
+
+### `includeFileExtension`
+
+- **Type:** `boolean`
+- **Default:** `false`
+
+When set to `true`, the generated import statements will include the file extension (e.g., `"../gql/graphql.ts"` instead of `"../gql/graphql"`).
+
+### `fileHeader`
+
+- **Type:** `string`
+- **Default:** `"This file was automatically generated based on {filename}"`
+
+Specifies a custom header comment to be added at the top of each generated file. The placeholder `{filename}` will be replaced with the name of the source file.
+
+**Example:**
+
+```typescript
+const config: CodegenConfig = {
+  schema: 'schema.graphql',
+  documents: ['src/**/*.tsx'],
+  generates: {
+    './src/gql/': {
+      preset: 'client',
+      plugins: ['@shane32/graphql-codegen-near-operation-file-plugin'],
+      config: {
+        fileHeader: 'Auto-generated from {filename} - DO NOT EDIT'
+      },
+      presetConfig: {
+        gqlTagName: 'gql'
+      }
+    }
+  }
+};
+```
+
+To disable the file header, set it to an empty string:
+
+```typescript
+config: {
+  fileHeader: ''
+}
+```
+
+## Example
 
 Given the following structure:
 
@@ -80,6 +127,7 @@ src/
 Where `UserProfile.g.ts` contains:
 
 ```typescript
+// This file was automatically generated based on UserProfile.tsx
 export { GetUserDocument } from "../gql/graphql";
 ```
 

@@ -2,6 +2,9 @@
 
 A plugin for [GraphQL Code Generator](https://www.graphql-code-generator.com/) that exports GraphQL documents from a generated file adjacent to where they were defined.
 
+[![NPM Version](https://img.shields.io/npm/v/%40shane32%2Fgraphql-codegen-near-operation-file-plugin)](https://www.npmjs.com/package/@shane32/graphql-codegen-near-operation-file-plugin)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 ## Installation
 
 ```bash

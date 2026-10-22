@@ -11,9 +11,8 @@ jobs:
         os:
           - ubuntu-latest
         node:
-          - 18.x
-          - 20.x
           - 22.x
+          - 24.x
 
     steps:
       - uses: actions/checkout@v4
@@ -21,11 +20,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-      - name: Install npm@10
-        run: npm i -g npm@10
       - name: Install modules - actor ${{ github.actor }} - version ${{ github.run_number }}
         run: npm ci
       - name: Build
         run: npm run build
+      - name: Lint
+        run: npm run lint
+      - name: Check formatting
+        run: npm run test-prettier
       - name: Run tests
         run: npm test

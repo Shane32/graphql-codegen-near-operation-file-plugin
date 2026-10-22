@@ -20,10 +20,8 @@ jobs:
       - name: Setup .npmrc file to publish to npm
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '22.x'
           registry-url: 'https://registry.npmjs.org'
-      - name: Install npm@10
-        run: npm i -g npm@10
       - name: Install modules
         run: npm ci
       - name: Build
@@ -35,7 +33,7 @@ jobs:
       - name: Setup .npmrc file to publish to GitHub Packages
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '22.x'
           registry-url: 'https://npm.pkg.github.com'
       - name: Configure package name, url, and version
         env:

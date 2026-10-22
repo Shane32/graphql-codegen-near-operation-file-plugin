@@ -6,7 +6,7 @@
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
   "scripts": {
-    "postinstall": "husky install",
+    "postinstall": "husky",
     "build": "npm run build:cjs && npm run build:esm && npm run build:types",
     "build:cjs": "node tools/cleanup cjs && tsc -p config/tsconfig.cjs.json && copyfiles \"src/**/*\" dist/cjs -e \"**/*.ts\" -e \"**/*.tsx\" -e \"**/*.js\" -e \"**/*.jsx\" -e \"**/*.test.*\" -u 1",
     "build:esm": "node tools/cleanup esm && tsc -p config/tsconfig.esm.json && copyfiles \"src/**/*\" dist/esm -e \"**/*.ts\" -e \"**/*.tsx\" -e \"**/*.js\" -e \"**/*.jsx\" -e \"**/*.test.*\" -u 1",
@@ -15,7 +15,8 @@
     "package": "npm run build && npm pack",
     "test": "",
     "prettier": "prettier -w \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\" --end-of-line auto",
-    "test-prettier": "prettier -c \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\" --end-of-line auto"
+    "test-prettier": "prettier -c \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\" --end-of-line auto",
+    "lint": "eslint src"
   },
   "publishConfig": {
     "access": "restricted"
@@ -49,23 +50,23 @@
     "graphql": "^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0"
   },
   "devDependencies": {
-    "@graphql-tools/apollo-engine-loader": "^8.0.6",
-    "@types/node": "^18.19.67",
+    "@graphql-tools/apollo-engine-loader": "^9.0.4",
+    "@types/node": "^22.20.5",
     "@types/pretty": "^2.0.3",
-    "@typescript-eslint/eslint-plugin": "^7.2.0",
-    "@typescript-eslint/parser": "^7.2.0",
+    "@typescript-eslint/eslint-plugin": "^8.72.0",
+    "@typescript-eslint/parser": "^8.72.0",
     "copyfiles": "^2.4.1",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "husky": "^9.0.11",
-    "prettier": "^2.8.8",
+    "eslint": "^10.13.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.7",
+    "husky": "^9.1.7",
+    "prettier": "^3.9.10",
     "pretty": "^2.0.0",
-    "pretty-quick": "^3.3.1",
-    "typescript": "^5.7.2"
+    "pretty-quick": "^4.2.2",
+    "typescript": "^6.0.3"
   },
   "engines": {
-    "node": ">=18",
+    "node": ">=22.18.0",
     "npm": ">=10"
   }
 }

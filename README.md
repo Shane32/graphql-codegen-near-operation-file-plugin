@@ -7,6 +7,8 @@ A plugin for [GraphQL Code Generator](https://www.graphql-code-generator.com/) t
 
 ## Installation
 
+Requires Node.js 22.18 or newer.
+
 ```bash
 npm install @shane32/graphql-codegen-near-operation-file-plugin
 ```

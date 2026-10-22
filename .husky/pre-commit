@@ -1,6 +1,4 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
 . "$(dirname "$0")/common.sh"
 
-npx.cmd pretty-quick --staged
-npm.cmd run test
+"$npx_command" pretty-quick --staged
+"$npm_command" run test

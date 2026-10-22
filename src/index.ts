@@ -139,7 +139,7 @@ function prepareFilesToWrite(
   operationDefinitionsByLocation: Record<string, IOperationDefinitionInfo[]>,
   outputFilePath: string,
   includeFileExtension: boolean,
-  fileHeader: string
+  fileHeader: string,
 ) {
   const filesToWrite: IFilenameContents[] = [];
   for (const location in operationDefinitionsByLocation) {
@@ -192,7 +192,7 @@ function createExportDefinitions(
   operationDefinitions: IOperationDefinitionInfo[],
   relativeOutputFile: string,
   includeFileExtension: boolean,
-  header: string
+  header: string,
 ) {
   const exportNames = operationDefinitions
     .map((def) => def.name)

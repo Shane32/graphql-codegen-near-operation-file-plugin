@@ -1,5 +1,5 @@
 import { Kind, OperationTypeNode } from "graphql";
-import type { PluginFunction, Types } from "@graphql-codegen/plugin-helpers";
+import type { DocumentNode, GraphQLSchema } from "graphql";
 import * as path from "path";
 import * as fs from "fs";
 
@@ -10,16 +10,18 @@ interface IPluginConfig {
   fileHeader?: string;
 }
 
-interface IInfo {
-  [key: string]: any;
-  outputFile?: string;
-  allPlugins?: Types.ConfiguredPlugin[];
-  pluginContext?: {
-    [key: string]: any;
-  };
+// Only the document and plugin metadata fields used by this plugin are required.
+interface IDocumentFile {
+  document?: DocumentNode;
+  location?: string;
 }
 
-const plugin: PluginFunction<IPluginConfig> = (schema, documents, config, info: IInfo | undefined) => {
+// Only the outputFile field of the plugin metadata is used by this plugin.
+interface IInfo {
+  outputFile?: string;
+}
+
+const plugin = (schema: GraphQLSchema, documents: IDocumentFile[], config: IPluginConfig, info?: IInfo): string => {
   void schema;
   void config;
 
@@ -67,7 +69,7 @@ interface IDocumentOutput {
 }
 
 // 1. Extract data from documents and info
-function extractData(documents: Types.DocumentFile[], info: IInfo | undefined) {
+function extractData(documents: IDocumentFile[], info: IInfo | undefined) {
   const input = { documents, info };
 
   const result: IDocumentOutput = {
